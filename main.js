@@ -46,8 +46,7 @@ class Game {
   }
 
   render() {
-    // this.context.fillStyle = 'red'
-    // this.context.fillRect(100, 100, 100, 40)
+    this.room.updateFloor()
     this.room.draw()
     this.player.draw()
   }
