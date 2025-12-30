@@ -4,7 +4,7 @@ class Player {
         this.x = 0
         this.y = 0
         this.yBase = 0
-        this.baseSize = 100
+        this.baseSize = 48 * 1.5
         this.height = this.baseSize * this.game.ratio
         this.width = this.baseSize * this.game.ratio
         this.img = new Image(); // Create new img element
@@ -36,17 +36,25 @@ class Player {
         this.x = this.game.room.getGameCenter().x - this.width / 2
         this.yBase = this.game.room.getGameCenter().y - this.height - 1
     }
-    draw() {
+    setHeight() {
         if(this.y + this.ySpeed < 0) {
             this.y = 0    
         } else {
             this.y += this.ySpeed
         }
-        this.game.context.drawImage(this.img, this.x, this.yBase - this.y, this.height, this.width)
+    }
+    setSpeed() {
         if(this.y !== 0) {
             this.ySpeed -= 1 * this.game.ratio
         } else {
             this.ySpeed = 0
         }
+    }
+    draw() {
+       this.setHeight()
+
+        this.game.context.drawImage(this.img, this.x, this.yBase - this.y, this.height, this.width)
+
+        this.setSpeed()
     }
 }

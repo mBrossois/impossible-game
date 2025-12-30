@@ -26,14 +26,19 @@ class Game {
     this.ratio = this.height / this.heightDefault
     
     this.resize(window.innerWidth, window.innerHeight)
+
+    this.speed = 8 * this.ratio
     
     this.player = new Player(this)
     this.room = new Room(this)
+    this.control = new Control(this)
     this.player.updateSize()
 
     window.addEventListener('resize', (event) => {
+      this.speed = 8 * this.ratio
       this.resize(event.currentTarget.innerWidth, event.currentTarget.innerHeight)
       this.room.setGameSize()
+      this.control.resize()
       this.player.updateSize()
     })
   }
@@ -49,6 +54,7 @@ class Game {
   render() {
     this.room.updateFloor()
     this.room.draw()
+    this.control.draw()
     this.player.draw()
   }
  }
