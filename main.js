@@ -21,8 +21,9 @@ class Game {
 
     this.width = this.canvas.width
     this.height = this.canvas.height
-    this.baseHeight = 720
-    this.ratio = this.height / this.baseHeight
+    this.widthDefault = 1080
+    this.heightDefault = 720
+    this.ratio = this.height / this.heightDefault
     
     this.resize(window.innerWidth, window.innerHeight)
     
@@ -38,11 +39,11 @@ class Game {
   }
 
   resize(width, height) {
-    this.canvas.width = width
+    this.canvas.width = width > this.widthDefault ? this.widthDefault : width
     this.canvas.height = height
     this.width = this.canvas.width
     this.height = this.canvas.height
-    this.ratio = this.height / this.baseHeight
+    this.ratio = this.height / this.heightDefault
   }
 
   render() {
