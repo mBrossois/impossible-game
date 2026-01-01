@@ -89,6 +89,21 @@ class Game {
     )
   }
 
+  isOnLeft(movingSquare, staticSquare) {
+    const hitOnX = (
+      movingSquare.collisionX + movingSquare.collisionSize - this.speed <= staticSquare.collisionX + staticSquare.levelX
+      && movingSquare.collisionX + movingSquare.collisionSize > staticSquare.collisionX + staticSquare.levelX
+    )
+    const inHeightZone = (
+      movingSquare.collisionY - 10 > staticSquare.collisionY - staticSquare.collisionSize
+      && movingSquare.collisionY + movingSquare.collisionSize < staticSquare.collisionY + (staticSquare.collisionSize * 2)
+    )
+
+    return (
+      hitOnX && inHeightZone
+    )
+  }
+
   resize(width, height) {
     this.canvas.width = width > this.widthDefault ? this.widthDefault : width
     this.canvas.height = height

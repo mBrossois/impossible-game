@@ -42,5 +42,9 @@ class Obstacle {
         if(this.game.isOnTop(this.game.player, this)) {
             this.game.player.status = playerStatus.bottom
         } 
+        
+        if(this.game.isOnLeft(this.game.player, this)) {
+            this.game.player.status = playerStatus.right
+        }
     }
 }
