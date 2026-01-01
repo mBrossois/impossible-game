@@ -6,8 +6,10 @@ window.onload = (() => {
   const game = new Game(canvas, ctx)
   game.render()
   function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    game.render()
+    if(game.status === gameStatus.play) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      game.render()
+    }
     requestAnimationFrame(animate)
   }
 
@@ -24,6 +26,8 @@ class Game {
     this.widthDefault = 1080
     this.heightDefault = 720
     this.ratio = this.height / this.heightDefault
+
+    this.status = gameStatus.play
     
     this.resize(window.innerWidth, window.innerHeight)
 
@@ -43,6 +47,48 @@ class Game {
     })
   }
 
+  getCollisionSide(square1, square2) {
+    // Calculate overlap on each axis
+    const dx = (square2.collisionX + square2.levelX) - square1.collisionX;
+    const dy = square2.collisionY - square1.collisionY;
+    
+    const combinedHalfWidth = (square1.collisionSize + square2.collisionSize) / 2;
+    const combinedHalfHeight = (square1.collisionSize + square2.collisionSize) / 2;
+    
+    // Calculate overlap amounts
+    const overlapX = combinedHalfWidth - Math.abs(dx);
+    const overlapY = combinedHalfHeight - Math.abs(dy);
+    
+    // No collision
+    if (overlapX <= 0 || overlapY <= 0) {
+        return null;
+    }
+    
+    // The side with smaller overlap is the collision side
+    if(dy > 0) {
+      // Vertical collision
+      return 'bottom';
+    }
+    else if (overlapX < overlapY) {
+        // Horizontal collision
+        return dx > 0 ? 'right' : 'left';
+    } else {
+        // Vertical collision
+        return 'top';
+    }
+  }
+
+  isOnTop(movingSquare, staticSquare) {
+    return (
+      ((movingSquare.collisionY + movingSquare.collisionSize <= staticSquare.collisionY 
+      && movingSquare.collisionY + movingSquare.collisionSize - movingSquare.ySpeed > staticSquare.collisionY)
+      || (movingSquare.collisionY + movingSquare.collisionSize > staticSquare.collisionY
+        && movingSquare.ySpeed === 0))
+      && movingSquare.collisionX + movingSquare.collisionSize >= (staticSquare.collisionX + staticSquare.levelX) 
+      && movingSquare.collisionX <  (staticSquare.collisionX + staticSquare.levelX) + staticSquare.collisionSize
+    )
+  }
+
   resize(width, height) {
     this.canvas.width = width > this.widthDefault ? this.widthDefault : width
     this.canvas.height = height
@@ -52,9 +98,9 @@ class Game {
   }
 
   render() {
-    this.room.updateFloor()
-    this.room.draw()
-    this.control.draw()
-    this.player.draw()
+      this.room.updateFloor()
+      this.room.draw()
+      this.control.draw()
+      this.player.draw()
   }
  }

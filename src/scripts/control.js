@@ -16,6 +16,7 @@ class Control {
         }
     }
     draw() {
+        this.game.player.status = undefined
         for(let i of this.obstacles) {
             i.draw()
         }
